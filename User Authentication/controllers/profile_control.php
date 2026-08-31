@@ -1,34 +1,16 @@
 <?php
 
 require_once __DIR__ . "/../models/db.php";
+require_once __DIR__ . "/../models/session_helper.php";
 
 
-// -------------------------------------------------
-// GET USER ID
-// -------------------------------------------------
-
-$userId = 0;
-
-if (isset($_GET["user_id"])) {
-
-    $userId = (int) $_GET["user_id"];
-
-} elseif (isset($_POST["user_id"])) {
-
-    $userId = (int) $_POST["user_id"];
-}
+$currentUser = requireLogin();
+$userId      = $currentUser["id"];
 
 
-// If no user ID was provided
-if ($userId <= 0) {
 
-    die("User ID is missing.");
-}
-
-
-// -------------------------------------------------
 // DATABASE
-// -------------------------------------------------
+
 
 $db = new mydb();
 
@@ -45,9 +27,8 @@ if (!$userRow) {
 }
 
 
-// -------------------------------------------------
 // VARIABLES
-// -------------------------------------------------
+
 
 $nameError = "";
 $emailError = "";
@@ -68,9 +49,8 @@ $address = $userRow["address"] ?? "";
 $phone = $userRow["phone"] ?? "";
 
 
-// -------------------------------------------------
 // PROFILE PICTURE SETTINGS
-// -------------------------------------------------
+
 
 $allowedPictureTypes = [
 
@@ -82,9 +62,8 @@ $allowedPictureTypes = [
 $maxPictureBytes = 2 * 1024 * 1024;
 
 
-// -------------------------------------------------
 // UPDATE PROFILE
-// -------------------------------------------------
+
 
 if (isset($_POST["update_profile"])) {
 
@@ -181,9 +160,8 @@ if (isset($_POST["update_profile"])) {
     }
 
 
-    // -------------------------------------------------
     // PROFILE IMAGE
-    // -------------------------------------------------
+
 
     $pendingUpload = null;
 
@@ -243,9 +221,8 @@ if (isset($_POST["update_profile"])) {
     }
 
 
-    // -------------------------------------------------
     // SAVE PROFILE IMAGE
-    // -------------------------------------------------
+
 
     $newPictureFilename = null;
 
@@ -286,10 +263,8 @@ if (isset($_POST["update_profile"])) {
         }
     }
 
-
-    // -------------------------------------------------
     // UPDATE DATABASE
-    // -------------------------------------------------
+
 
     if ($hasError === "") {
 
@@ -324,9 +299,8 @@ if (isset($_POST["update_profile"])) {
 }
 
 
-// -------------------------------------------------
 // CHANGE PASSWORD
-// -------------------------------------------------
+
 
 if (isset($_POST["change_password"])) {
 
