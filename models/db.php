@@ -31,14 +31,30 @@
 
 
 /* ---------------------------------------------------------------------
-   Login details for the database.
-   define() makes a constant - a value that never changes while the
-   page runs. On XAMPP the default MySQL user is "root" with no password.
+   THE DATABASE LOGIN DETAILS.
+
+   They are NOT written here. The whole project - this model, the admin
+   module, the blog - reads them from one shared file:
+
+       config/db_config.php
+
+   That file holds four constants: DB_HOST, DB_USER, DB_PASS, DB_NAME.
+   Keeping them in one place means that if the password ever changes,
+   there is a single line to edit instead of four different files to
+   hunt down - and no risk of half the site still using the old one.
+
+   __DIR__ is the folder THIS file is sitting in, which is models/.
+   So __DIR__ . "/../config/db_config.php" steps up one level out of
+   models/ and back down into config/. Writing the path that way means
+   it is always correct, no matter which page did the including -
+   a plain "../config/db_config.php" would depend on where the browser
+   thinks it is, and would break when a controller includes us.
+
+   require_once (rather than require) means "load it, unless it has
+   already been loaded". That matters here: define() would complain if
+   the same constant were declared twice.
    --------------------------------------------------------------------- */
-define("DB_HOST", "localhost");
-define("DB_USER", "root");
-define("DB_PASS", "");
-define("DB_NAME", "car_rental_db");
+require_once __DIR__ . "/../config/db_config.php";
 
 
 /* ---------------------------------------------------------------------
