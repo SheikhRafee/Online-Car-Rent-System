@@ -1,0 +1,29 @@
+<?php
+include "session_check.php";
+include "../models/admin_db.php";
+
+$mydb   = new admin_db();
+$conobj = $mydb->openConn();
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && hash_equals($_SESSION["csrf_token"], $_POST["csrf_token"] ?? "")) {
+
+    $id = (int) $_POST["id"];
+
+    $result = $mydb->findCarById($id, $conobj);
+    if ($result->num_rows == 0) {
+        $_SESSION["flash_error"] = "Car not found.";
+    } elseif ($mydb->carHasActiveOrders($id, $conobj)) {
+        $_SESSION["flash_error"] = "Cannot delete this car — it has pending or confirmed orders.";
+    } else {
+        $car = $result->fetch_assoc();
+        if (!empty($car["image_path"]) && file_exists("../public/uploads/cars/" . $car["image_path"])) {
+            unlink("../public/uploads/cars/" . $car["image_path"]);
+        }
+        $mydb->deleteCar($id, $conobj);
+        $_SESSION["flash_success"] = "Car deleted successfully.";
+    }
+}
+
+header("Location: ../views/car_list.php");
+exit;
+?>
