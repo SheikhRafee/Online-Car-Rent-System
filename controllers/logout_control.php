@@ -17,6 +17,6 @@ if (ini_get("session.use_cookies")) {
 session_destroy();
 
 
-header("Location: ../views/test_login.php?logged_out=1");
+header("Location: ../views/login.php?logged_out=1");
 exit;
 ?>
