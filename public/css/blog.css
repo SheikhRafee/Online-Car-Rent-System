@@ -156,3 +156,24 @@ footer {
     padding: 15px;
     color: #555;
 }
+
+/* --- moved from the blog branch's own style.css --- */
+.blog-form {
+    background: #fff;
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 28px;
+    box-shadow: 0 6px 16px rgba(255, 143, 199, 0.25);
+    border: 3px solid #ffe0ef;
+}
+
+.deleteForm {
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.post-meta {
+    font-size: 0.8rem;
+    color: #c77ba0;
+    margin-bottom: 10px;
+}
